@@ -1,0 +1,351 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"/>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  <title>Attendance Sheet</title>
+  <style>
+    h1{
+      text-align:center;
+      padding-top:18px;
+      padding-bottom:55px;
+      font-size:25px;
+      color:red;
+      font-weight:bold;
+    }
+     
+    .bg-container{
+      background-color:#9ebab7;
+    }
+    .attendance-table {
+      margin-bottom: 20px;
+      border-collapse:separate;
+      border-spacing:5px;
+     
+     
+
+    }
+
+    .attendance-table th,
+    .attendance-table td {
+      padding: 10px;
+      text-align: center;
+     
+      
+      
+     
+    }
+
+    .attendance-table th {
+      background-color: #f2f2f2;
+      
+      
+    
+    }
+
+    .attendance-table td select {
+      width: 100%;
+      height: 100%;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+
+    .attendance-table td input[type="checkbox"] {
+      transform: scale(1.5);
+      
+    }
+
+    .add-row-btn {
+      margin-top: 15px;
+      background-color:green;
+      border-radius:5px;
+      color:white;
+      font-family:"roboto";
+      width:100px;
+
+
+     
+    }
+
+    .delete-row-btn {
+      margin-left: 10px;
+      
+    }
+    .add-row-container{
+      display:flex;
+      justify-content:center;
+
+    }
+
+    .add-class-input {
+      margin-top: 10px;
+    }
+    .text-center{
+      text-align:center;
+      height:35px;
+      width:200px;
+      border-width:0px;
+      color:black;
+      font-size:18px;
+      font-family:"roboto";
+       
+    }
+    .container{
+      display:flex;
+      justify-content:center;
+      padding-bottom:30px;
+      padding-top:70px;
+       
+    }
+    .select-class-con{
+      padding-bottom:15px;
+      text-align:center;
+    }
+    
+    .log-text-right{
+      text-align:right;
+      
+    }
+    .box{
+      display:flex;
+      justify-content:center;  
+    }
+    .navbar-color {
+      background-color:orange;
+      
+  }
+    #color{
+      color:white; 
+    }
+    .nav-image {
+      height: 7vh;
+      
+    }
+    .add-text-center{
+      text-align:center;
+      height:30px;
+      width:60px;
+      border-width:1px;
+      }
+  </style>
+</head>
+
+<body>
+  
+ 
+  <nav class="navbar navbar-expand-lg navbar-light  navbar-color">
+        
+        <a class="navbar-brand" href="#">
+          <img class="nav-image" src="https://images.assetsdelivery.com/compings_v2/saiful007/saiful0071908/saiful007190800159.jpg"/></a>
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav ml-auto">
+              
+                <a class="nav-link"  id="color"> <a href="{% url "login_page" %}"> Log out </a></a>
+                
+            </div>
+        </div>
+      
+  </nav> 
+
+
+
+  
+<div class="bg-container">
+  
+  <h1>ATTENDANCE MANAGEMENT</h1>
+  
+  
+  <form id="attendance-form" action="/submit-attendance" method="POST">{%csrf_token%}
+    <div class="select-class-con">
+      <label for="class-select">Select Class:</label>
+      
+      <select id="class-select" name="select class">
+        <option value="">-- Select Class --</option>
+        <option value="10th">10th class</option>
+        <option value="9th">9th class</option>
+        <option value="8th">8th class</option>
+        <!-- Add more class options here -->
+      </select>
+      <input type="text" id="add-class-input" placeholder="----Add Class---">
+      <button class="add-text-center" type="button" id="add-class-btn">Add</button>
+    </div>
+    <div class="box">
+    <table class="attendance-table",>
+      
+      <thead>
+        
+        <tr >
+          
+          <th >Roll Number</th>
+          <th >Student Name</th>
+          <th >Date/Time</th>
+          <th >Attendance</th>
+          <th >Action</th>
+         
+        
+        </tr>
+        
+      </thead>
+      
+    
+      <tbody id="attendance-body" >
+      </tbody>
+    </table>
+    
+  </div>
+  
+  
+  <div class="add-row-container">
+    <button type="button" id="add-row-btn" class="add-row-btn">Add Row</button>
+  </div>
+    <br><br>
+  
+    <div class="container">
+    <button style="background-color:orange; border-radius:10px;" type="submit" id="submit-btn" class="text-center">Submit</button>
+  </div>
+  </form>
+
+</table>
+</div>
+
+<script>
+  
+    var classSelect = document.getElementById("class-select");
+    
+    var addClassInput = document.getElementById("add-class-input");
+    var addClassBtn = document.getElementById("add-class-btn");
+    var attendanceBody = document.getElementById("attendance-body");
+    var addRowBtn = document.getElementById("add-row-btn");
+    var submitBtn = document.getElementById("submit-btn");
+    
+    
+    
+    classSelect.addEventListener("change", function () {
+      attendanceBody.innerHTML = "";
+  
+      var classValue = this.value;
+      if (classValue) {
+        addRowBtn.style.display = "block";
+        submitBtn.style.display = "block";
+      } else {
+        addRowBtn.style.display = "none";
+        submitBtn.style.display = "none";
+      }
+    });
+  
+    addRowBtn.addEventListener("click", function () {
+      addRow();
+    });
+  
+    addClassBtn.addEventListener("click", function () {
+      addClass();
+    });
+  
+    function addRow() {
+      var classValue = classSelect.value;
+      if (!classValue) {
+        alert("Please select a class first.");
+        return;
+      }
+  
+      var row = document.createElement("tr");
+      row.classList.add("attendance-row");
+  
+      var rollNumberCell = document.createElement("td");
+      var rollNumberInput = document.createElement("input");
+      rollNumberInput.type = "text";
+      rollNumberInput.name = classValue + "_roll_number[]";
+      rollNumberInput.value = "";
+      rollNumberCell.appendChild(rollNumberInput);
+      row.appendChild(rollNumberCell);
+  
+      var studentNameCell = document.createElement("td");
+      var studentNameInput = document.createElement("input");
+      studentNameInput.type = "text";
+      studentNameInput.name = classValue + "_student_name[]";
+      studentNameInput.value = "";
+      studentNameCell.appendChild(studentNameInput);
+      row.appendChild(studentNameCell);
+  
+      var dateTimeCell = document.createElement("td");
+      var dateTimeInput = document.createElement("input");
+      dateTimeInput.type = "text";
+      dateTimeInput.name = classValue + "_date_time[]";
+      dateTimeInput.value = "";
+      dateTimeCell.appendChild(dateTimeInput);
+      row.appendChild(dateTimeCell);
+  
+      var attendanceCell = document.createElement("td");
+      var attendanceSelect = document.createElement("select");
+      attendanceSelect.name = classValue + "_attendance[]";
+      var presentOption = document.createElement("option");
+      presentOption.value = "Present";
+      presentOption.textContent = "Present";
+      attendanceSelect.appendChild(presentOption);
+      var absentOption = document.createElement("option");
+      absentOption.value = "Absent";
+      absentOption.textContent = "Absent";
+      attendanceSelect.appendChild(absentOption);
+      attendanceCell.appendChild(attendanceSelect);
+      row.appendChild(attendanceCell);
+  
+      var actionCell = document.createElement("td");
+      var deleteRowBtn = document.createElement("button");
+      deleteRowBtn.type = "button";
+      deleteRowBtn.textContent = "Delete";
+      deleteRowBtn.classList.add("delete-row-btn");
+      deleteRowBtn.addEventListener("click", function () {
+        row.remove();
+      });
+      actionCell.appendChild(deleteRowBtn);
+      row.appendChild(actionCell);
+  
+      attendanceBody.appendChild(row);
+    }
+  
+    function addClass() {
+      var newClass = addClassInput.value.trim();
+      if (!newClass) {
+        return;
+      }
+  
+      var option = document.createElement("option");
+      option.value = newClass;
+      option.textContent = newClass;
+      classSelect.appendChild(option);
+      addClassInput.value = "";
+    }
+  
+    document.getElementById("attendance-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+  
+      var formData = new FormData(this);
+      var attendanceData = {};
+  
+      for (var pair of formData.entries()) {
+        var key = pair[0];
+        var value = pair[1];
+  
+        if (attendanceData[key]) {
+          attendanceData[key].push(value);
+        } else {
+          attendanceData[key] = [value];
+        }
+      }
+  
+      // Send the attendanceData to the server or perform any desired operations
+      console.log(attendanceData);
+      location.reload();
+    });
+    
+  </script>
+
+</body>
+</html>
